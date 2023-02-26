@@ -505,6 +505,24 @@ function hmrAcceptRun(bundle, id) {
 },{}],"dUrpa":[function(require,module,exports) {
 var _galleryItemsJs = require("./gallery-items.js");
 // Change code below this line
+const gallery = document.querySelector(".gallery");
+const items = (0, _galleryItemsJs.galleryItems).map(({ preview , original , description  })=>{
+    const galleryItem = document.createElement("a");
+    galleryItem.classList.add("gallery__item");
+    galleryItem.setAttribute("href", original);
+    const image = document.createElement("img");
+    image.src = preview;
+    image.alt = description;
+    image.classList.add("gallery__image");
+    galleryItem.appendChild(image);
+    return galleryItem;
+});
+gallery.append(...items);
+const lightbox = new SimpleLightbox(".gallery a", {
+    captions: true,
+    captionDelay: 250,
+    captionsData: "alt"
+});
 console.log((0, _galleryItemsJs.galleryItems));
 
 },{"./gallery-items.js":"9C7dK"}],"9C7dK":[function(require,module,exports) {
@@ -513,8 +531,8 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "galleryItems", ()=>galleryItems);
 const galleryItems = [
     {
-        preview: "https://cdn.pixabay.com/photo/2019/05/14/16/43/rchids-4202820__480.jpg",
-        original: "https://cdn.pixabay.com/photo/2019/05/14/16/43/rchids-4202820_1280.jpg",
+        preview: "https://cdn.pixabay.com/photo/2019/05/14/16/43/flower-4202825__340.jpg",
+        original: "https://cdn.pixabay.com/photo/2019/05/14/16/43/flower-4202825_1280.jpg",
         description: "Hokkaido Flower"
     },
     {
