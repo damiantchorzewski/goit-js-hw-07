@@ -1,46 +1,60 @@
 import { galleryItems } from './gallery-items.js';
-// Change code below this line
+
 const gallery = document.querySelector('.gallery');
 
 const createGalleryItem = ({ preview, original, description }) => {
-  const galleryItem = document.createElement('li');
+  const galleryItem = document.createElement('div');
   galleryItem.classList.add('gallery__item');
 
-  const galleryLink = document.createElement('a');
-  galleryLink.classList.add('gallery__link');
-  galleryLink.href = original;
+  const link = document.createElement('a');
+  link.href = original;
+  link.classList.add('gallery__link');
 
-  const galleryImage = document.createElement('img');
-  galleryImage.classList.add('gallery__image');
-  galleryImage.src = preview;
-  galleryImage.alt = description;
-  galleryImage.dataset.source = original;
+  const image = document.createElement('img');
+  image.src = preview;
+  image.alt = description;
+  image.dataset.source = original;
+  image.classList.add('gallery__image');
 
-  galleryLink.appendChild(galleryImage);
-  galleryItem.appendChild(galleryLink);
+  link.appendChild(image);
+
+  galleryItem.appendChild(link);
 
   return galleryItem;
 };
 
-const galleryItems = galleryItems.map(createGalleryItem);
-gallery.append(...galleryItems);
+const renderGallery = () => {
+  const items = galleryItems.map(createGalleryItem);
+  gallery.append(...items);
+};
+
+renderGallery();
 
 gallery.addEventListener('click', (event) => {
   event.preventDefault();
-  if (event.target.nodeName !== 'IMG') {
+
+  const target = event.target;
+
+  if (target.nodeName !== 'IMG') {
     return;
   }
 
+  const original = target.dataset.source;
+
   const instance = basicLightbox.create(`
-    <img src="${event.target.dataset.source}" width="800" height="600">
-`);
+    <img src="${original}" width="800" height="600">
+  `);
 
   instance.show();
 
-  document.addEventListener('keydown', (event) => {
+  const closeModal = (event) => {
     if (event.key === 'Escape') {
       instance.close();
+      window.removeEventListener('keydown', closeModal);
     }
-  });
+  };
+
+  window.addEventListener('keydown', closeModal);
 });
+
 console.log(galleryItems);
